@@ -6,17 +6,24 @@ MAX_ROUTES = 100
 routesVisited = set()
 routes = 0
 areasVisited = set()
+conn = None
 
 def setup_database():
+    global conn
+
     conn = sqlite3.connect("routes.db")
     c = conn.cursor().execute("CREATE TABLE IF NOT EXISTS routes (id INTEGER PRIMARYKEY, html TEXT, mountain_project_id VARCHAR(255))")
     conn.commit()
-    conn.close()
-
 
 def downloadRoute(url):
     print("Route: " + url)
     # download route and add route to database
+    route_id = re.findall(r'[0-9]+', url)[0]
+    html_data = str(requests.get(url).content)
+
+    global conn
+    conn.cursor().execute("INSERT INTO routes (html, mountain_project_id) VALUES (?,?)", (html_data, route_id))
+    conn.commit()
     
     # exit if max number of routes reached
     global routes
