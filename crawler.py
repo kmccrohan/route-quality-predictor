@@ -2,7 +2,7 @@ import re
 import requests
 import sqlite3
 
-MAX_ROUTES = 100
+MAX_ROUTES = 75000
 routesVisited = set()
 routes = 0
 areasVisited = set()
@@ -27,17 +27,21 @@ def downloadRoute(url):
     print("Route: " + url)
     # download route and add route to database
     route_id = re.findall(r'[0-9]+', url)[0]
-    html_data = str(requests.get(url).content)
+    try:
+        html_data = str(requests.get(url).content)
 
-    global conn
-    conn.cursor().execute("INSERT INTO routes (html, mountain_project_id, url) VALUES (?,?,?)", (html_data, route_id, url))
-    conn.commit()
-    
-    # exit if max number of routes reached
-    global routes
-    routes += 1
-    if routes == MAX_ROUTES:
-        exit()
+        global conn
+        conn.cursor().execute("INSERT INTO routes (html, mountain_project_id, url) VALUES (?,?,?)", (html_data, route_id, url))
+        conn.commit()
+
+        # exit if max number of routes reached
+        global routes
+        routes += 1
+        if routes == MAX_ROUTES:
+            exit()
+    except requests.exceptions.RequestException as e:
+        print(e)
+
 
 def crawlPage(html):
     urls = re.findall(r'href=[\'"]?([^\'" >]+)', html)
@@ -46,7 +50,11 @@ def crawlPage(html):
             if url not in areasVisited:
                 areasVisited.add(url)
                 print("Visiting area: " + url)
-                crawlPage(str(requests.get(url).content))
+                try:
+                    pageHTML = str(requests.get(url).content)
+                    crawlPage(pageHTML)
+                except requests.exceptions.RequestException as e:
+                    print(e)
         elif url.startswith("https://www.mountainproject.com/route/"):
             if url not in routesVisited:
                 routesVisited.add(url)
