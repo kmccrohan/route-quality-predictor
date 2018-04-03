@@ -19,7 +19,7 @@ def query_routes(ids):
     try:
         url = "https://www.mountainproject.com/data/get-routes?routeIds=" + ','.join(ids) + "&&key=200141500-3a451ba2c98e95d4945db023a65ea3d2"
         r = requests.get(url)
-        return json.loads(r.content)
+        return json.loads(str(r.content))
     except requests.exceptions.RequestException as e:
         print(e)
         return None
