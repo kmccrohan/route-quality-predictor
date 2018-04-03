@@ -16,6 +16,10 @@ def load_set():
     for route in routes:
         routesVisited.add(route[0])
 
+def close_database():
+    global conn
+    conn.close()
+
 def setup_database():
     global conn
 
@@ -38,6 +42,7 @@ def downloadRoute(url):
         global routes
         routes += 1
         if routes == MAX_ROUTES:
+            close_database()
             exit()
     except requests.exceptions.RequestException as e:
         print(e)
@@ -64,3 +69,4 @@ setup_database()
 load_set()
 r = requests.get("https://www.mountainproject.com")
 crawlPage(str(r.content))
+close_database()
