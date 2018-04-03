@@ -5,7 +5,7 @@ import json
 import time
 
 conn = None
-CHUNK_SIZE = 200
+CHUNK_SIZE = 100
 
 def setup_database():
     global conn
@@ -42,7 +42,7 @@ def loop_routes():
              jsons = query_routes(ids)
              if jsons is not None:
                  add_json(jsons)
-                 time.sleep(1)
+                 time.sleep(5)
 
 setup_database()
 loop_routes()
