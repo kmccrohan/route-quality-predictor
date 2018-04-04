@@ -30,7 +30,6 @@ def add_json(jsons):
     conn.commit()
 
 def loop_routes():
-    chunk_size = 160
     cur = conn.cursor()
     cur.execute('SELECT mountain_project_id FROM routes WHERE api is NULL')
     while True:
