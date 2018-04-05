@@ -121,7 +121,8 @@ def parse_apis():
             exit()
         else:
              id, json_string = result
-             parse_json(id, json.loads(json_string))
+             if json_string is not None:
+                 parse_json(id, json.loads(json_string))
 
 setup_database()
 add_columns()
