@@ -68,7 +68,7 @@ def get_grade(rating):
     ratings = rating.split()
     saftey = 0
     difficulty = 0
-    if len(ratings) = 0:
+    if len(ratings) == 0:
         return -1, -1
     if ratings[-1] in SAFTEY_GRADES:
         saftey = float(SAFTEY_GRADES.index(ratings[-1]) / len(SAFTEY_GRADES))
