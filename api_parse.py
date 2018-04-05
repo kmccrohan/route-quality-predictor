@@ -68,6 +68,8 @@ def get_grade(rating):
     ratings = rating.split()
     saftey = 0
     difficulty = 0
+    if len(ratings) = 0:
+        return -1, -1
     if ratings[-1] in SAFTEY_GRADES:
         saftey = float(SAFTEY_GRADES.index(ratings[-1]) / len(SAFTEY_GRADES))
         del ratings[-1]
@@ -103,14 +105,15 @@ def parse_json(id, json):
     starVotes = int(json["starVotes"])
     saftey, difficulty = get_grade(json["rating"])
     trad, ice, sport, tr, alpine, snow, mixed, aid, boulder, other = get_types(json["type"])
-    conn.cursor().execute('UPDATE routes SET pitches = ?,' +
+    if difficulty >= 0:
+        conn.cursor().execute('UPDATE routes SET pitches = ?,' +
                             'name = ?, ' +
                             'latitude = ?, longitude = ?, stars = ?, starVotes = ?, ' +
                             'saftey = ?, difficulty = ?, Trad = ?, Ice = ?, ' +
                             'Sport = ?, TR = ?, Alpine = ?, Snow = ?, Mixed = ?, ' +
                             'Aid = ?, Boulder = ?, Other = ? ' +
                             'WHERE mountain_project_id = ?', (pitches, name, lat, lon, stars, starVotes, saftey, difficulty, trad, ice, sport, tr, alpine, snow, mixed, aid, boulder, other, id))
-    conn.commit()
+        conn.commit()
 
 def parse_apis():
     cur = conn.cursor()
