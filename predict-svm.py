@@ -1,5 +1,6 @@
 import numpy as np
 import sqlite3
+from sklearn import svm
 
 def convert_to_numpy_array(query_results):
   as_2d_array = list(map(lambda x: list(x), query_results))
@@ -11,6 +12,12 @@ def get_data():
   return convert_to_numpy_array(data)
 
 def main():
-  get_data()
+  route_data = get_data()
+  stars = route_data[:, 0]
+  data = route_data[:, 1:]
+
+  clf = svm.SVC()
+  clf.fit(data, stars)
+
 
 main()
