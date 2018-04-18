@@ -2,6 +2,13 @@ import numpy as np
 import sqlite3
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+from nltk.stem.snowball import SnowballStemmer
+#from nltk.stem import WordNetLemmatizer
+
+#lemmer=WordNetLemmatizer()
+stemmer = SnowballStemmer('english')
 
 def convert_to_numpy_array(query_results):
   as_2d_array = list(map(lambda x: list(x), query_results))
@@ -28,3 +35,34 @@ def get_datasets(types=None, attrs=None,):
    stars = route_data[:, 0]
    data = route_data[:, 1:]
    return train_test_split(data, stars, test_size=0.20)
+
+def lemmatize_stem(data):
+    for d in data:
+        d[1] = ' '.join([stemmer.stem(word) for word in d[1].split(' ')])
+        #d[1] = ' '.join([lemmer.lemmatize(word) for word in d[1].split(' ')])
+    return data
+
+def get_words(types):
+    route_data = get_data(types, attrs=["description"])
+    route_data = np.array([np.array(x) for x in route_data if x[1] is not None])
+    route_data = lemmatize_stem(route_data)
+    stars = route_data[:, 0]
+    stars = [int(s) for s in stars]
+    data = route_data[:, 1:]
+    data = np.array([d[0] for d in data])
+    return train_test_split(data, stars, test_size=0.20)
+
+def tfid(bag):
+    tfidf_transformer = TfidfTransformer()
+    return tfidf_transformer.fit_transform(bag)
+
+def get_bag_of_words(types=None, max_features=100):
+    vectorizer = CountVectorizer(stop_words="english", max_features=max_features)
+    xtrain, xtest, ytrain, ytest = get_words(types)
+    X = vectorizer.fit_transform(xtrain)
+    X = tfid(X)
+    testVectorizer = CountVectorizer(vocabulary=vectorizer.get_feature_names())
+    X_test = testVectorizer.fit_transform(xtest)
+    X_test = tfid(X_test)
+
+    return X.toarray(), X_test.toarray(), ytrain, ytest

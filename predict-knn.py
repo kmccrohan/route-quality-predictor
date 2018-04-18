@@ -11,6 +11,7 @@ def main():
    knn=neighbors.KNeighborsClassifier(n_neighbors=int(sys.argv[1]))
    knn.fit(data_train, stars_train)
    predictions = knn.predict(data_test)
+   print(predictions)
    print("Accuracy: %f\n" % accuracy_score(stars_test, predictions))
 
 main()
