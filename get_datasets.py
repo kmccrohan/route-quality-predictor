@@ -47,6 +47,7 @@ def get_words(types):
     route_data = get_data(types, attrs=["description"])
     route_data = np.array([np.array(x) for x in route_data if x[1] is not None and x[1] is not ""])
     route_data = lemmatize_stem(route_data)
+    route_data = np.array([np.array(x) for x in route_data if x[1] is not None and x[1] is not ""])
     stars = route_data[:, 0]
     stars = [int(float(s)) for s in stars]
     data = route_data[:, 1:]
