@@ -1,6 +1,7 @@
 import tensorflow as tf
 from get_datasets import get_datasets
 import numpy as np
+import sys
 
 #one_hot == one component is one and the others are off
 # 10 classes, 0-9
@@ -86,7 +87,7 @@ def train_neural_network():
     optimizer = tf.train.AdamOptimizer().minimize(cost)
 
 	#cycle of fed forward and back prop
-    max_epochs = 1000
+    max_epochs = int(sys.argv[1])
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -102,8 +103,8 @@ def train_neural_network():
                 epoch_loss += c
 
             print('Epoch', epoch, 'completed out of',max_epochs,'loss:',epoch_loss)
-            if (prev_epoc_loss is not None and prev_epoc_loss - epoch_loss < min_loss_step and epoch_loss < min_loss):
-                break;
+            # if (prev_epoc_loss is not None and prev_epoc_loss - epoch_loss < min_loss_step and epoch_loss < min_loss):
+            #     break;
             prev_epoc_loss = epoch_loss
 
         # correct_predictions = tf.equal(tf.argmax(prediction, 1), tf.argmax(stars_test, 1))
