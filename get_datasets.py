@@ -28,6 +28,7 @@ def get_data(types, attrs):
   if where_clause is not None:
       query += " WHERE " + where_clause
   data = conn.cursor().execute(query).fetchall()
+  conn.close()
   return convert_to_numpy_array(data)
 
 def get_datasets(types=None, attrs=None,):
