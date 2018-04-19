@@ -100,7 +100,6 @@ def train_neural_network():
                 epoch_y = stars_train[i*batch_size: (i+1)*batch_size]
                 _, c = sess.run([optimizer, cost], feed_dict={x: epoch_x, y: epoch_y})
                 epoch_loss += c
-                print('.')
 
             print('Epoch', epoch, 'completed out of',max_epochs,'loss:',epoch_loss)
             if (prev_epoc_loss is not None and prev_epoc_loss - epoch_loss < min_loss_step and epoch_loss < min_loss):
