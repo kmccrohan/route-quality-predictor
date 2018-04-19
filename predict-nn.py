@@ -21,7 +21,7 @@ n_nodes_hl2 = 100
 n_nodes_hl3 = 100
 
 n_classes = 5
-batch_size = 100 # batches of 100 data points
+batch_size = 1000000 # batches of 100 data points
 min_loss_step = 0.001
 min_loss = 10
 

@@ -21,7 +21,7 @@ n_nodes_hl2 = NFEAUTRES
 n_nodes_hl3 = NFEAUTRES
 
 n_classes = 5
-batch_size = 100 # batches of 100 data points
+batch_size = 100000 # batches of 100 data points
 min_loss_step = 0.001
 min_loss = 10
 
