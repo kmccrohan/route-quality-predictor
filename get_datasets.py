@@ -5,9 +5,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from nltk.stem.snowball import SnowballStemmer
-#from nltk.stem import WordNetLemmatizer
+from nltk.stem import WordNetLemmatizer
 
-#lemmer=WordNetLemmatizer()
+lemmer=WordNetLemmatizer()
 stemmer = SnowballStemmer('english')
 
 def convert_to_numpy_array(query_results):
@@ -39,7 +39,7 @@ def get_datasets(types=None, attrs=None,):
 def lemmatize_stem(data):
     for d in data:
         d[1] = ' '.join([stemmer.stem(word) for word in d[1].split(' ')])
-        #d[1] = ' '.join([lemmer.lemmatize(word) for word in d[1].split(' ')])
+        d[1] = ' '.join([lemmer.lemmatize(word) for word in d[1].split(' ')])
     return data
 
 def get_words(types):
