@@ -22,7 +22,7 @@ n_nodes_hl3 = NFEAUTRES
 
 n_classes = 5
 batch_size = 100 # batches of 100 data points
-min_loss = 0.1
+min_loss = 0.001
 
 
 #place holding variables

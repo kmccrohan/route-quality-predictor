@@ -16,12 +16,12 @@ def convert_to_numpy_array(query_results):
 
 def get_data(types, attrs):
   conn = sqlite3.connect("routes.db")
-  attr_clause = "latitude, longitude, saftey, difficulty, Trad, Ice, Sport, TR, Alpine, Snow, Mixed, Aid, Boulder, Other"
+  attr_clause = "latitude, longitude, saftey, difficulty, description_length, Trad, Ice, Sport, TR, Alpine, Snow, Mixed, Aid, Boulder, Other"
   where_clause = None
   if types is not None:
       types = [ " %s = 1" % t for t in types]
       where_clause = " OR ".join(types)
-      attr_clause = "latitude, longitude, saftey, difficulty"
+      attr_clause = "latitude, longitude, saftey, difficulty, description_length"
   if attrs is not None:
       attr_clause = ", ".join(attrs)
   query = ("SELECT ROUND(stars), %s FROM routes" % attr_clause)
@@ -47,7 +47,7 @@ def get_words(types):
     route_data = np.array([np.array(x) for x in route_data if x[1] is not None])
     route_data = lemmatize_stem(route_data)
     stars = route_data[:, 0]
-    stars = [int(s) for s in stars]
+    stars = [int(float(s)) for s in stars]
     data = route_data[:, 1:]
     data = np.array([d[0] for d in data])
     return train_test_split(data, stars, test_size=0.20)
