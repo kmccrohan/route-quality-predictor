@@ -1,5 +1,5 @@
 import tensorflow as tf
-from get_datasets import get_bag_of_words
+from read_lexicon import read_lexicon
 import numpy as np
 import sys
 
@@ -16,7 +16,7 @@ import sys
 8 = [0,0,0,0,0,0,0,1,0]
 '''
 
-NFEAUTRES = 100
+NFEAUTRES = int(sys.argv[2])
 n_nodes_hl1 = NFEAUTRES
 n_nodes_hl2 = NFEAUTRES
 n_nodes_hl3 = NFEAUTRES
@@ -120,7 +120,7 @@ def train_neural_network():
 def convert_stars_obj(stars):
     return [[1 if (x + 1) == z else 0 for x in range(5)] for z in stars]
 
-data_train, data_test, stars_train, stars_test = get_bag_of_words(max_features=NFEAUTRES)
+data_train, data_test, stars_train, stars_test = read_lexicon(max_features=NFEAUTRES)
 data_train = np.array(data_train, dtype=np.float32)
 data_test = np.array(data_test, dtype=np.float32)
 stars_train = np.array(stars_train, dtype=np.float32)
