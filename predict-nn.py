@@ -106,6 +106,8 @@ def train_neural_network():
             # if (prev_epoc_loss is not None and prev_epoc_loss - epoch_loss < min_loss_step and epoch_loss < min_loss):
             #     break;
             prev_epoc_loss = epoch_loss
+            if epoch_loss == 0:
+                break;
 
         # correct_predictions = tf.equal(tf.argmax(prediction, 1), tf.argmax(stars_test, 1))
         # accuracy_predictions = tf.reduce_mean(tf.cast(correct_predictions, 'float'))
