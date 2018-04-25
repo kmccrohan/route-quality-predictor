@@ -1,6 +1,6 @@
 from sklearn import svm
 from sklearn.metrics import accuracy_score
-from get_datasets import get_datasets
+from get_datasets import get_datasets, binary_stars
 import sys
 
 def main():
