@@ -1,6 +1,10 @@
 # route-quality-predictor
 Machine Learning to predict the quality of a climbing route based on various attributes, images, and descriptors.
 
+## Binary classification
+Note for any predictor, you can add `-b` to the end of the command line args to run
+in binary classification mode where a 3 or 4 star route is 1, and other routes are 0.
+
 ## Create a lexicon stored as csv files for bag of word use.
 ```
 python3 create_lexicon.py featuresInLexicon

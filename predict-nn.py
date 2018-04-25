@@ -1,5 +1,5 @@
 import tensorflow as tf
-from get_datasets import get_datasets
+from get_datasets import get_datasets, binary_stars
 import numpy as np
 import sys
 
@@ -118,9 +118,13 @@ def train_neural_network():
 
 
 def convert_stars_obj(stars):
-    return [[1 if (x + 1) == z else 0 for x in range(5)] for z in stars]
+    return [[1 if (x + 1) == z else 0 for x in range(n_classes)] for z in stars]
 
 data_train, data_test, stars_train, stars_test = get_datasets()
+if "-b" in sys.argv:
+    stars_train, stars_test = binary_stars(stars_train, stars_test)
+    n_classes = 2
+    y = tf.placeholder('float', [None, n_classes]) # label of the data
 data_train = np.array(data_train, dtype=np.float32)
 data_test = np.array(data_test, dtype=np.float32)
 stars_train = np.array(stars_train, dtype=np.float32)

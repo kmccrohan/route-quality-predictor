@@ -37,6 +37,9 @@ def get_datasets(types=None, attrs=None,):
    data = route_data[:, 1:]
    return train_test_split(data, stars, test_size=0.20)
 
+def binary_stars(stars_train, stars_test):
+    return [1 if x > 3 else 0 for x in stars_train], [1 if x > 3 else 0 for x in stars_test]
+
 def lemmatize_stem(data):
     for d in data:
         d[1] = ' '.join([stemmer.stem(word) for word in d[1].split(' ')])
