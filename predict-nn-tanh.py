@@ -1,6 +1,5 @@
 import tensorflow as tf
-from read_lexicon import read_lexicon
-from get_datasets import binary_stars
+from get_datasets import binary_stars, get_datasets
 import numpy as np
 import sys
 import os
@@ -18,11 +17,11 @@ import os
 8 = [0,0,0,0,0,0,0,1,0]
 '''
 
-NFEAUTRES = int(sys.argv[2])
-MODEL_DIR = 'models/route_description_' + str(NFEAUTRES) + '_words_tanh'
+MODEL_DIR = 'models/route_features_model_tanh'
 MODEL_PATH = MODEL_DIR + '/model'
 if not os.path.exists(MODEL_DIR):
     os.makedirs(MODEL_DIR)
+NFEAUTRES = 15
 n_nodes_hl1 = NFEAUTRES
 n_nodes_hl2 = NFEAUTRES
 n_nodes_hl3 = NFEAUTRES
@@ -131,7 +130,7 @@ def train_neural_network():
 def transform_stars(stars):
     return [[x] for x in stars]
 
-data_train, data_test, stars_train, stars_test = read_lexicon(max_features=NFEAUTRES)
+data_train, data_test, stars_train, stars_test = get_datasets()
 data_train = np.array(data_train, dtype=np.float32)
 data_test = np.array(data_test, dtype=np.float32)
 stars_train = transform_stars(np.array(stars_train, dtype=np.float32)* 0.2 )
