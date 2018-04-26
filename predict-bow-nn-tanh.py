@@ -62,15 +62,16 @@ def neural_network_model(data):
 	#feed forward
     l1 = tf.add(tf.matmul(data,hidden_1_layer['weights']), hidden_1_layer['biases'])
 	#activation function --rectified linear --
-    l1 = tf.nn.relu(l1)
+    l1 = tf.nn.leaky_relu(l1)
 
     l2 = tf.add(tf.matmul(l1,hidden_2_layer['weights']), hidden_2_layer['biases'])
-    l2 = tf.nn.relu(l2)
+    l2 = tf.nn.leaky_relu(l2)
 
     l3 = tf.add(tf.matmul(l2,hidden_3_layer['weights']), hidden_3_layer['biases'])
-    l3 = tf.nn.relu(l3)
+    l3 = tf.nn.tanh(l3)
 
-    output = tf.tanh(tf.matmul(l3,output_layer['weights']) + output_layer['biases'])
+    output = tf.matmul(l3,output_layer['weights']) + output_layer['biases']
+    output = tf.sigmoid(output)
 
     return output
 
@@ -81,7 +82,7 @@ def train_neural_network():
 
 	#cross entropy with logits (cost fnc)
 	#calculate the difference that we got to the known label that we have
-    cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y) )
+    cost = tf.losses.mean_squared_error(predictions=prediction, labels=y)
 
 	#minimize the cost  #back propagation
 	#learning_rate = .001
@@ -113,15 +114,20 @@ def train_neural_network():
         # correct_predictions = tf.equal(tf.argmax(prediction, 1), tf.argmax(stars_test, 1))
         # accuracy_predictions = tf.reduce_mean(tf.cast(correct_predictions, 'float'))
         # print('Accuracy:',accuracy_predictions.eval({x: data_test}))
-        print('Accuracy:',prediction.eval({x: data_test, y: stars_test}))
+        print('Accuracy:',prediction.eval({x: data_test}))
+        print(tf.losses.mean_squared_error(labels = stars_test, predictions = prediction.eval({x: data_test})).eval())
+        print(stars_test)
 
+def transform_stars(stars):
+    print(stars)
+    return [[x] for x in stars]
 
 
 data_train, data_test, stars_train, stars_test = read_lexicon(max_features=NFEAUTRES)
 data_train = np.array(data_train, dtype=np.float32)
 data_test = np.array(data_test, dtype=np.float32)
-stars_train = np.array(stars_train, dtype=np.float32)
-stars_test = np.array(stars_test, dtype=np.float32)
+stars_train = transform_stars(np.array(stars_train, dtype=np.float32)* 0.2 )
+stars_test = transform_stars(np.array(stars_test, dtype=np.float32)* 0.2) 
 
 if (batch_size > len(data_train)):
     batch_size = len(data_train)
