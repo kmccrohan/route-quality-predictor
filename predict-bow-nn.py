@@ -106,7 +106,7 @@ def train_neural_network():
             print('Epoch', epoch, 'completed out of',max_epochs,'loss:',epoch_loss)
             # if (prev_epoc_loss is not None and prev_epoc_loss - epoch_loss < min_loss_step and epoch_loss < min_loss):
             #     break;
-            if prev_epoc_loss - epoch_loss < 0 prev_epoc_loss < min_loss:
+            if prev_epoc_loss - epoch_loss < 0 and prev_epoc_loss < min_loss:
                 break;
             prev_epoc_loss = epoch_loss
 
