@@ -125,6 +125,8 @@ def train_neural_network():
 
         #print(prediction.eval({x: data_test}))
         print('Min loss', min_loss)
+        print('Training size:', len(stars_train))
+        print('Test size:', len(stars_test))
         print('Accuracy:',tf.losses.mean_squared_error(labels = stars_test, predictions = prediction.eval({x: data_test})).eval())
         #print(stars_test)
 

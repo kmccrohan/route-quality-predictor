@@ -126,6 +126,8 @@ def train_neural_network():
         correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
         accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
         print('Min loss: ', min_loss)
+        print('Training size:', len(stars_train))
+        print('Test size:', len(stars_test))
         print('Accuracy:',accuracy.eval({x: data_test, y: stars_test}))
 
 
