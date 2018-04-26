@@ -3,6 +3,7 @@ from read_lexicon import read_lexicon
 from get_datasets import binary_stars
 import numpy as np
 import sys
+import os
 
 #one_hot == one component is one and the others are off
 # 10 classes, 0-9
@@ -16,9 +17,15 @@ import sys
 .....
 8 = [0,0,0,0,0,0,0,1,0]
 '''
-
 NFEAUTRES = int(sys.argv[2])
-MODEL_PATH = 'models/route_description_' + str(NFEAUTRES) + '_words_model'
+MODEL_DIR = 'models/route_description_' + str(NFEAUTRES) + '_words'
+BINARY_MODE = False
+if "-b" in sys.argv:
+    BINARY_MODE = True
+    MODEL_DIR += '_binary'
+MODEL_PATH = MODEL_DIR + '/model'
+if not os.path.exists(MODEL_DIR):
+    os.makedirs(MODEL_DIR)
 n_nodes_hl1 = NFEAUTRES
 n_nodes_hl2 = NFEAUTRES
 n_nodes_hl3 = NFEAUTRES
@@ -121,6 +128,7 @@ def train_neural_network():
 
         correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
         accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
+        print('Min loss: ', min_loss)
         print('Accuracy:',accuracy.eval({x: data_test, y: stars_test}))
 
 
@@ -128,7 +136,7 @@ def convert_stars_obj(stars):
     return [[1 if (x + 1) == z else 0 for x in range(n_classes)] for z in stars]
 
 data_train, data_test, stars_train, stars_test = read_lexicon(max_features=NFEAUTRES)
-if "-b" in sys.argv:
+if BINARY_MODE:
     stars_train, stars_test = binary_stars(stars_train, stars_test)
     n_classes = 2
     y = tf.placeholder('float', [None, n_classes]) # label of the data

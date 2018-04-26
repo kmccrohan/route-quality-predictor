@@ -2,6 +2,7 @@ import tensorflow as tf
 from get_datasets import get_datasets, binary_stars
 import numpy as np
 import sys
+import os
 
 #one_hot == one component is one and the others are off
 # 10 classes, 0-9
@@ -16,7 +17,14 @@ import sys
 8 = [0,0,0,0,0,0,0,1,0]
 '''
 
-MODEL_PATH = 'models/route_features_model'
+MODEL_DIR = 'models/route_features_model'
+BINARY_MODE = False
+if "-b" in sys.argv:
+    BINARY_MODE = True
+    MODEL_DIR += '_binary'
+MODEL_PATH = MODEL_DIR + '/model'
+if not os.path.exists(MODEL_DIR):
+    os.makedirs(MODEL_DIR)
 NFEAUTRES = 15
 n_nodes_hl1 = NFEAUTRES
 n_nodes_hl2 = 100
@@ -117,6 +125,7 @@ def train_neural_network():
 
         correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
         accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
+        print('Min loss: ', min_loss)
         print('Accuracy:',accuracy.eval({x: data_test, y: stars_test}))
 
 
@@ -124,7 +133,7 @@ def convert_stars_obj(stars):
     return [[1 if (x + 1) == z else 0 for x in range(n_classes)] for z in stars]
 
 data_train, data_test, stars_train, stars_test = get_datasets()
-if "-b" in sys.argv:
+if BINARY_MODE:
     stars_train, stars_test = binary_stars(stars_train, stars_test)
     n_classes = 2
     y = tf.placeholder('float', [None, n_classes]) # label of the data
