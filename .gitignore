@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 lexicons/*
+models/*
 
 # C extensions
 *.so

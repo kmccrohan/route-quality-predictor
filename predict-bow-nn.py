@@ -18,14 +18,13 @@ import sys
 '''
 
 NFEAUTRES = int(sys.argv[2])
+MODEL_PATH = 'models/route_description_' + str(NFEAUTRES) + '_words_model'
 n_nodes_hl1 = NFEAUTRES
 n_nodes_hl2 = NFEAUTRES
 n_nodes_hl3 = NFEAUTRES
 
 n_classes = 5
 batch_size = 100000 # batches of 100 data points
-min_loss_step = 0.001
-min_loss = 20
 
 
 #place holding variables
@@ -89,6 +88,10 @@ def train_neural_network():
 
 	#cycle of fed forward and back prop
     max_epochs = int(sys.argv[1])
+    min_loss = 100000000
+
+    # use to save best run.
+    saver = tf.train.Saver()
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -104,19 +107,19 @@ def train_neural_network():
                 epoch_loss += c
 
             print('Epoch', epoch, 'completed out of',max_epochs,'loss:',epoch_loss)
-            # if (prev_epoc_loss is not None and prev_epoc_loss - epoch_loss < min_loss_step and epoch_loss < min_loss):
-            #     break;
-            if prev_epoc_loss is not None and prev_epoc_loss - epoch_loss < 0 and prev_epoc_loss < min_loss or epoch_loss == 0:
-                break;
-            prev_epoc_loss = epoch_loss
+
+            if epoch_loss < min_loss:
+                min_loss = epoch_loss
+                saver.save(sess, MODEL_PATH)
+
+            if epoch_loss == 0:
+                break
 
 
-        # correct_predictions = tf.equal(tf.argmax(prediction, 1), tf.argmax(stars_test, 1))
-        # accuracy_predictions = tf.reduce_mean(tf.cast(correct_predictions, 'float'))
-        # print('Accuracy:',accuracy_predictions.eval({x: data_test}))
+        # restore the optimal session
+        saver.restore(sess, MODEL_PATH)
 
         correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
-
         accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
         print('Accuracy:',accuracy.eval({x: data_test, y: stars_test}))
 
