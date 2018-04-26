@@ -25,7 +25,7 @@ n_nodes_hl3 = NFEAUTRES
 n_classes = 5
 batch_size = 100000 # batches of 100 data points
 min_loss_step = 0.001
-min_loss = 10
+min_loss = 20
 
 
 #place holding variables
@@ -106,9 +106,10 @@ def train_neural_network():
             print('Epoch', epoch, 'completed out of',max_epochs,'loss:',epoch_loss)
             # if (prev_epoc_loss is not None and prev_epoc_loss - epoch_loss < min_loss_step and epoch_loss < min_loss):
             #     break;
-            prev_epoc_loss = epoch_loss
-            if epoch_loss == 0:
+            if prev_epoc_loss - epoch_loss < 0 prev_epoc_loss < min_loss:
                 break;
+            prev_epoc_loss = epoch_loss
+
 
         # correct_predictions = tf.equal(tf.argmax(prediction, 1), tf.argmax(stars_test, 1))
         # accuracy_predictions = tf.reduce_mean(tf.cast(correct_predictions, 'float'))
