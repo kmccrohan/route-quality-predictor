@@ -5,6 +5,7 @@ __pycache__/
 
 lexicons/*
 models/*
+saved_models/*
 
 # C extensions
 *.so

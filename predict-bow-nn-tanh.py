@@ -111,12 +111,9 @@ def train_neural_network():
             if epoch_loss == 0:
                 break;
 
-        # correct_predictions = tf.equal(tf.argmax(prediction, 1), tf.argmax(stars_test, 1))
-        # accuracy_predictions = tf.reduce_mean(tf.cast(correct_predictions, 'float'))
-        # print('Accuracy:',accuracy_predictions.eval({x: data_test}))
-        print('Accuracy:',prediction.eval({x: data_test}))
-        print(tf.losses.mean_squared_error(labels = stars_test, predictions = prediction.eval({x: data_test})).eval())
-        print(stars_test)
+        #print(prediction.eval({x: data_test}))
+        print('Accuracy:',tf.losses.mean_squared_error(labels = stars_test, predictions = prediction.eval({x: data_test})).eval())
+        #print(stars_test)
 
 def transform_stars(stars):
     print(stars)
@@ -127,7 +124,7 @@ data_train, data_test, stars_train, stars_test = read_lexicon(max_features=NFEAU
 data_train = np.array(data_train, dtype=np.float32)
 data_test = np.array(data_test, dtype=np.float32)
 stars_train = transform_stars(np.array(stars_train, dtype=np.float32)* 0.2 )
-stars_test = transform_stars(np.array(stars_test, dtype=np.float32)* 0.2) 
+stars_test = transform_stars(np.array(stars_test, dtype=np.float32)* 0.2)
 
 if (batch_size > len(data_train)):
     batch_size = len(data_train)
