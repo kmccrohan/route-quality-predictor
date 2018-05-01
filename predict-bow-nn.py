@@ -34,15 +34,6 @@ n_classes = 5
 batch_size = 100000 # batches of 100 data points
 
 
-#place holding variables
-#matrix - height by width [height, width]
-x = tf.placeholder('float', [None, NFEAUTRES]) #input data
-#if you attempt to feed something that is not of that shape
-#then tf will throw an error
-
-y = tf.placeholder('float', [None, n_classes]) # label of the data
-
-
 def neural_network_model(data):
 
 #computation graph

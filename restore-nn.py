@@ -32,7 +32,6 @@ data, stars = get_test_routes()
 if BINARY_MODE:
     stars, stars_test = binary_stars(stars, stars)
     n_classes = 2
-    y = tf.placeholder('float', [None, n_classes]) # label of the data
 data = np.array(data, dtype=np.float32)
 stars = np.array(stars, dtype=np.float32)
 stars = convert_stars_obj(stars)

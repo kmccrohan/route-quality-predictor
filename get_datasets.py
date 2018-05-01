@@ -68,13 +68,27 @@ def tfid(bag):
     tfidf_transformer = TfidfTransformer()
     return tfidf_transformer.fit_transform(bag)
 
+def get_test_bag_of_words(vocab):
+    route_data = get_data(None, attrs=["description"], test=1)
+    route_data = np.array([np.array(x) for x in route_data if x[1] is not None and x[1] is not ""])
+    route_data = lemmatize_stem(route_data)
+    stars = route_data[:, 0]
+    stars = [int(float(s)) for s in stars]
+    data = route_data[:, 1:]
+    data = np.array([d[0] for d in data])
+    testVectorizer = CountVectorizer(vocabulary=vocab)
+    data = testVectorizer.fit_transform(data)
+    data = tfid(data)
+    return data.toarray(), stars
+
 def get_bag_of_words(types=None, max_features=100):
     vectorizer = CountVectorizer(stop_words="english", max_features=max_features)
     xtrain, xtest, ytrain, ytest = get_words(types)
     X = vectorizer.fit_transform(xtrain)
     X = tfid(X)
-    testVectorizer = CountVectorizer(vocabulary=vectorizer.get_feature_names())
+    vocab = vectorizer.get_feature_names()
+    testVectorizer = CountVectorizer(vocabulary=vocab)
     X_test = testVectorizer.fit_transform(xtest)
     X_test = tfid(X_test)
 
-    return X.toarray(), X_test.toarray(), ytrain, ytest
+    return X.toarray(), X_test.toarray(), ytrain, ytest, vocab

@@ -4,7 +4,7 @@ import csv
 import os
 
 n = int(sys.argv[1])
-data_train, data_test, stars_train, stars_test = get_bag_of_words(max_features=n)
+data_train, data_test, stars_train, stars_test, vocab = get_bag_of_words(max_features=n)
 
 if not os.path.exists("lexicons"):
     os.makedirs("lexicons")
@@ -24,3 +24,7 @@ with open("lexicons/lexicon-ytrain-" + str(n) + ".csv","w+") as my_csv:
 with open("lexicons/lexicon-ytest-" + str(n) + ".csv","w+") as my_csv:
     csvWriter = csv.writer(my_csv,delimiter=',')
     csvWriter.writerow(stars_test)
+
+with open("lexicons/lexicon-vocab-" + str(n) + ".csv","w+") as my_csv:
+    csvWriter = csv.writer(my_csv,delimiter=',')
+    csvWriter.writerow(vocab)
