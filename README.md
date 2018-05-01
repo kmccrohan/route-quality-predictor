@@ -35,3 +35,10 @@ python3 predict-bow-svm.py featuresInLexicon
 ```
 python3 predict-nn.py numberOfEpochs
 ```
+
+# How to get route data.
+```
+python3 crawler.py max_num_routes <0 or 1 for test mode>
+python3 api.py
+python3 api_parse.py
+```

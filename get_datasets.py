@@ -17,10 +17,12 @@ def convert_to_numpy_array(query_results):
 def get_data(types, attrs):
   conn = sqlite3.connect("routes.db")
   attr_clause = "latitude, longitude, saftey, difficulty, description_length, Trad, Ice, Sport, TR, Alpine, Snow, Mixed, Aid, Boulder, Other"
-  where_clause = None
+  where_clause = "test = 0"
   if types is not None:
       types = [ " %s = 1" % t for t in types]
-      where_clause = " OR ".join(types)
+      where_clause += " AND ("
+      where_clause += " OR ".join(types)
+      where_clause += ")"
       attr_clause = "latitude, longitude, saftey, difficulty, description_length"
   if attrs is not None:
       attr_clause = ", ".join(attrs)

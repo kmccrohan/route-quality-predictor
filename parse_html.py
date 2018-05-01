@@ -19,3 +19,11 @@ def main():
     connection.commit()
 
 main()
+
+def get_description_from_html(html):
+    soup = BeautifulSoup(html, "html.parser")
+    description = soup.select_one(".fr-view")
+    raw_text = ""
+    if description:
+      raw_text = description.get_text()
+    return raw_text

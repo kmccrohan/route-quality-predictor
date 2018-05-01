@@ -1,12 +1,15 @@
 import re
 import requests
 import sqlite3
+from parse_html import get_description_from_html
+import sys
 
-MAX_ROUTES = 75000
+MAX_ROUTES = int(sys.argv[1])
 routesVisited = set()
 routes = 0
 areasVisited = set()
 conn = None
+TEST_MODE = int(sys.argv[2])
 
 def load_set():
     global conn
@@ -24,7 +27,7 @@ def setup_database():
     global conn
 
     conn = sqlite3.connect("routes.db")
-    c = conn.cursor().execute("CREATE TABLE IF NOT EXISTS routes (id INTEGER PRIMARYKEY, html TEXT, mountain_project_id VARCHAR(255), url TEXT, api TEXT)")
+    c = conn.cursor().execute("CREATE TABLE IF NOT EXISTS routes (id INTEGER PRIMARYKEY, html TEXT, mountain_project_id VARCHAR(255), url TEXT, api TEXT, description TEXT, test INTEGER)")
     conn.commit()
 
 def downloadRoute(url, id):
@@ -32,9 +35,10 @@ def downloadRoute(url, id):
     # download route and add route to database
     try:
         html_data = str(requests.get(url).content)
+        description = get_description_from_html(html_data)
 
         global conn
-        conn.cursor().execute("INSERT INTO routes (html, mountain_project_id, url) VALUES (?,?,?)", (html_data, route_id, url))
+        conn.cursor().execute("INSERT INTO routes (html, mountain_project_id, url, description, description_length, test) VALUES (?,?,?,?,?,?)", (html_data, id, url, description, len(description), TEST_MODE))
         conn.commit()
 
         # exit if max number of routes reached
