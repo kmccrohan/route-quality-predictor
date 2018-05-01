@@ -12,7 +12,7 @@ def load_set():
     global conn
     global routesVisited
 
-    routes = conn.cursor().execute("SELECT url FROM routes").fetchall()
+    routes = conn.cursor().execute("SELECT mountain_project_id FROM routes").fetchall()
     for route in routes:
         routesVisited.add(route[0])
 
@@ -27,10 +27,9 @@ def setup_database():
     c = conn.cursor().execute("CREATE TABLE IF NOT EXISTS routes (id INTEGER PRIMARYKEY, html TEXT, mountain_project_id VARCHAR(255), url TEXT, api TEXT)")
     conn.commit()
 
-def downloadRoute(url):
+def downloadRoute(url, id):
     print("Route: " + url)
     # download route and add route to database
-    route_id = re.findall(r'[0-9]+', url)[0]
     try:
         html_data = str(requests.get(url).content)
 
@@ -61,9 +60,10 @@ def crawlPage(html):
                 except requests.exceptions.RequestException as e:
                     print(e)
         elif url.startswith("https://www.mountainproject.com/route/"):
-            if url not in routesVisited:
-                routesVisited.add(url)
-                downloadRoute(url)
+            route_id = re.findall(r'[0-9]+', url)[0]
+            if route_id not in routesVisited:
+                routesVisited.add(route_id)
+                downloadRoute(url, route_id)
 
 setup_database()
 load_set()

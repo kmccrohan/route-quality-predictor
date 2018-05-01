@@ -76,7 +76,7 @@ def neural_network_model(data):
     l3 = tf.add(tf.matmul(l2,hidden_3_layer['weights']), hidden_3_layer['biases'])
     l3 = tf.nn.relu(l3)
 
-    output = tf.matmul(l3,output_layer['weights']) + output_layer['biases']
+    output = tf.add(tf.matmul(l3,output_layer['weights']), output_layer['biases'], name="output_op")
 
     return output
 
@@ -141,7 +141,9 @@ data_train, data_test, stars_train, stars_test = read_lexicon(max_features=NFEAU
 if BINARY_MODE:
     stars_train, stars_test = binary_stars(stars_train, stars_test)
     n_classes = 2
-    y = tf.placeholder('float', [None, n_classes]) # label of the data
+y = tf.placeholder('float', [None, n_classes], name="y") # label of the data
+x = tf.placeholder('float', [None, NFEAUTRES], name="x") #input data
+
 data_train = np.array(data_train, dtype=np.float32)
 data_test = np.array(data_test, dtype=np.float32)
 stars_train = np.array(stars_train, dtype=np.float32)
