@@ -1,5 +1,5 @@
 import tensorflow as tf
-from get_datasets import get_datasets, binary_stars
+from get_datasets import get_test_routes, binary_stars
 import numpy as np
 import sys
 
@@ -28,16 +28,13 @@ def neural_net(data_test, stars_test):
 def convert_stars_obj(stars):
     return [[1 if (x + 1) == z else 0 for x in range(n_classes)] for z in stars]
 
-data_train, data_test, stars_train, stars_test = get_datasets()
+data, stars = get_test_routes()
 if BINARY_MODE:
-    stars_train, stars_test = binary_stars(stars_train, stars_test)
+    stars, stars_test = binary_stars(stars, stars)
     n_classes = 2
     y = tf.placeholder('float', [None, n_classes]) # label of the data
-data_train = np.array(data_train, dtype=np.float32)
-data_test = np.array(data_test, dtype=np.float32)
-stars_train = np.array(stars_train, dtype=np.float32)
-stars_test = np.array(stars_test, dtype=np.float32)
-stars_test = convert_stars_obj(stars_test)
-stars_train = convert_stars_obj(stars_train)
+data = np.array(data, dtype=np.float32)
+stars = np.array(stars, dtype=np.float32)
+stars = convert_stars_obj(stars)
 
-neural_net(data_test, stars_test)
+neural_net(data, stars)

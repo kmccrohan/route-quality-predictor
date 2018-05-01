@@ -14,10 +14,10 @@ def convert_to_numpy_array(query_results):
   as_2d_array = list(map(lambda x: list(x), query_results))
   return np.array(as_2d_array)
 
-def get_data(types, attrs):
+def get_data(types, attrs, test=0):
   conn = sqlite3.connect("routes.db")
   attr_clause = "latitude, longitude, saftey, difficulty, description_length, Trad, Ice, Sport, TR, Alpine, Snow, Mixed, Aid, Boulder, Other"
-  where_clause = "test = 0"
+  where_clause = "test = " + str(test)
   if types is not None:
       types = [ " %s = 1" % t for t in types]
       where_clause += " AND ("
@@ -32,6 +32,12 @@ def get_data(types, attrs):
   data = conn.cursor().execute(query).fetchall()
   conn.close()
   return convert_to_numpy_array(data)
+
+def get_test_routes():
+   route_data = get_data(None, None, 1)
+   stars = route_data[:, 0]
+   data = route_data[:, 1:]
+   return data, stars
 
 def get_datasets(types=None, attrs=None,):
    route_data = get_data(types, attrs)
