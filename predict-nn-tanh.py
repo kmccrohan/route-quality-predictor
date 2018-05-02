@@ -21,7 +21,7 @@ MODEL_DIR = 'models/route_features_model_tanh'
 MODEL_PATH = MODEL_DIR + '/model'
 if not os.path.exists(MODEL_DIR):
     os.makedirs(MODEL_DIR)
-NFEAUTRES = 15
+NFEAUTRES = 14
 n_nodes_hl1 = NFEAUTRES
 n_nodes_hl2 = NFEAUTRES
 n_nodes_hl3 = NFEAUTRES

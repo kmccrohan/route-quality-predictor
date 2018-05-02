@@ -25,7 +25,7 @@ if "-b" in sys.argv:
 MODEL_PATH = MODEL_DIR + '/model'
 if not os.path.exists(MODEL_DIR):
     os.makedirs(MODEL_DIR)
-NFEAUTRES = 15
+NFEAUTRES = 14
 n_nodes_hl1 = NFEAUTRES
 n_nodes_hl2 = 100
 n_nodes_hl3 = 100
