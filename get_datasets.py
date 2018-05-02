@@ -14,9 +14,9 @@ def convert_to_numpy_array(query_results):
   as_2d_array = list(map(lambda x: list(x), query_results))
   return np.array(as_2d_array)
 
-def get_data(types, attrs, test=0):
+def get_data(types, attrs, test=0, needDescription = False):
   conn = sqlite3.connect("routes.db")
-  attr_clause = "latitude, longitude, saftey, difficulty, description_length, Trad, Ice, Sport, TR, Alpine, Snow, Mixed, Aid, Boulder, Other"
+  attr_clause = "latitude, longitude, saftey, difficulty, Trad, Ice, Sport, TR, Alpine, Snow, Mixed, Aid, Boulder, Other"
   where_clause = "test = " + str(test) + " AND stars IS NOT NULL"
   if types is not None:
       types = [ " %s = 1" % t for t in types]
@@ -27,8 +27,9 @@ def get_data(types, attrs, test=0):
   if attrs is not None:
       attr_clause = ", ".join(attrs)
   query = ("SELECT ROUND(stars), %s FROM routes" % attr_clause)
-  if where_clause is not None:
-      query += " WHERE " + where_clause
+  if needDescription:
+      where_clause += " AND description_length > 0"
+  query += " WHERE " + where_clause
   data = conn.cursor().execute(query).fetchall()
   conn.close()
   return convert_to_numpy_array(data)
@@ -39,7 +40,7 @@ def get_test_routes():
    data = route_data[:, 1:]
    return data, stars
 
-def get_datasets(types=None, attrs=None,):
+def get_datasets(types=None, attrs=None):
    route_data = get_data(types, attrs)
    stars = route_data[:, 0]
    data = route_data[:, 1:]
@@ -55,8 +56,8 @@ def lemmatize_stem(data):
     return data
 
 def get_words(types):
-    route_data = get_data(types, attrs=["description"])
-    route_data = np.array([np.array(x) for x in route_data if x[1] is not None and x[1] is not ""])
+    route_data = get_data(types, attrs=["description"], needDescription = True)
+    route_data = np.array(route_data)
     route_data = lemmatize_stem(route_data)
     stars = route_data[:, 0]
     stars = [int(float(s)) for s in stars]
@@ -69,7 +70,7 @@ def tfid(bag):
     return tfidf_transformer.fit_transform(bag)
 
 def get_test_bag_of_words(vocab):
-    route_data = get_data(None, attrs=["description"], test=1)
+    route_data = get_data(None, attrs=["description"], test=1, needDescription = True)
     route_data = np.array([np.array(x) for x in route_data if x[1] is not None and x[1] is not ""])
     route_data = lemmatize_stem(route_data)
     stars = route_data[:, 0]
