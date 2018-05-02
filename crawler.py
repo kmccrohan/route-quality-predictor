@@ -3,13 +3,13 @@ import requests
 import sqlite3
 from parse_html import get_description_from_html
 import sys
+import random
 
 MAX_ROUTES = int(sys.argv[1])
 routesVisited = set()
 routes = 0
 areasVisited = set()
 conn = None
-TEST_MODE = int(sys.argv[2])
 
 def load_set():
     global conn
@@ -38,7 +38,8 @@ def downloadRoute(url, id):
         description = get_description_from_html(html_data)
 
         global conn
-        conn.cursor().execute("INSERT INTO routes (html, mountain_project_id, url, description, description_length, test) VALUES (?,?,?,?,?,?)", (html_data, id, url, description, len(description), TEST_MODE))
+        test = random.choice([0,0,0,0,1])
+        conn.cursor().execute("INSERT INTO routes (html, mountain_project_id, url, description, description_length, test) VALUES (?,?,?,?,?,?)", (html_data, id, url, description, len(description), test))
         conn.commit()
 
         # exit if max number of routes reached

@@ -43,14 +43,12 @@ Your neural network model will be saved in `./models`.
 # How to get route data.
 ```
 # will create table and crawl, getting specified number of routes and parsing description out of html
-python3 crawler.py max_num_routes testMode
+python3 crawler.py max_num_routes
 # will download the api json for each route that doesn't have it
 python3 api.py
 # will parse the api json for each route that has not been parsed
 python3 api_parse.py
 ```
-Where `testMode` is `0` for normal routes (used in regular training and testing)
-or `1` special group of routes reserved for extra validation and restoration of the neural network models.
 
 # How to restore a neural net and run the "test" items in database on it.
 Route description neural net. Make sure if the model was created in binary mode, you run
