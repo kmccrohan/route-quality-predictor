@@ -1,5 +1,6 @@
 import sqlite3
 import random
+import sys
 
 conn = None
 
@@ -15,8 +16,11 @@ def loop_routes():
     cur = conn.cursor()
     cur.execute('SELECT mountain_project_id FROM routes')
     result = cur.fetchall()
+    i = 0
     for route in result:
-        test = random.choice([0,0,0,0,1])
+        test = 0 if i < int(sys.argv[1]) else 1
+        i += 1
+        #test = random.choice([0,0,0,0,1])
         cur.execute('UPDATE routes SET test = ? WHERE mountain_project_id = ?', [test, route[0]])
     conn.commit()
 
